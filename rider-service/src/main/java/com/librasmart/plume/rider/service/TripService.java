@@ -1,10 +1,8 @@
 package com.librasmart.plume.rider.service;
 
 import com.librasmart.plume.rider.dto.TripRequestDto;
-import com.librasmart.plume.rider.dto.TripStatusUpdateDto;
 import com.librasmart.plume.rider.entity.Trip;
 import com.librasmart.plume.rider.entity.TripStatus;
-import com.librasmart.plume.rider.exception.DriverAssignmentRequiredException;
 import com.librasmart.plume.rider.exception.TripNotFoundException;
 import com.librasmart.plume.rider.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,19 +42,5 @@ public class TripService {
     public void cancelTrip(UUID tripId) {
         Trip trip = getTrip(tripId);
         trip.transitionTo(TripStatus.CANCELLED);
-    }
-
-    @Transactional
-    public void updateTripStatus(UUID tripId, TripStatusUpdateDto tripStatusUpdateDto) {
-        Trip trip = getTrip(tripId);
-
-        if (tripStatusUpdateDto.status() == TripStatus.ACCEPTED) {
-            if (tripStatusUpdateDto.driverId() == null) {
-                throw new DriverAssignmentRequiredException("A driver ID is required to accept a trip");
-            }
-            trip.accept(tripStatusUpdateDto.driverId());
-        } else {
-            trip.transitionTo(tripStatusUpdateDto.status());
-        }
     }
 }

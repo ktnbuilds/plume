@@ -1,6 +1,5 @@
 package com.librasmart.plume.rider.controller;
 
-import com.librasmart.plume.rider.dto.TripStatusUpdateDto;
 import com.librasmart.plume.rider.util.SortValidator;
 import com.librasmart.plume.rider.dto.ApiResponse;
 import com.librasmart.plume.rider.dto.TripRequestDto;
@@ -61,21 +60,5 @@ public class TripController {
     public ResponseEntity<ApiResponse<Void>> cancelTrip(@PathVariable UUID tripId) {
         tripService.cancelTrip(tripId);
         return ResponseEntity.ok(ApiResponse.success("Trip cancelled successfully.", null));
-    }
-
-    /*
-     * TODO: DEV STAND-IN. Remove once Kafka consumers drive these transitions. Exists only so the trip state machine
-     *  can be exercised by hand (e.g. in Postman) before Matching Service and Kafka exist. In the real system,
-     *  MATCHED / ACCEPTED / IN_PROGRESS / COMPLETED / NO_DRIVERS_AVAILABLE are triggered by events; only CANCELLED
-     *  stays a rider-facing REST action (POST /trips/{id}/cancel). Currently unauthenticated: any caller can set any
-     *  legal status. Delete TripStatusUpdateDto and DriverAssignmentRequiredException (including its handler) along
-     *  with this method.
-     */
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<ApiResponse<Void>> updateTripStatus(
-            @PathVariable UUID tripId, @Valid @RequestBody TripStatusUpdateDto tripStatusUpdateDto
-    ) {
-        tripService.updateTripStatus(tripId, tripStatusUpdateDto);
-        return ResponseEntity.ok(ApiResponse.success("Trip status updated successfully.", null));
     }
 }

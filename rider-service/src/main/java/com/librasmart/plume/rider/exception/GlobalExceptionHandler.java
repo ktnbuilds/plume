@@ -50,11 +50,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.failure(ex.getMessage(), errors));
     }
 
-    @ExceptionHandler(DriverAssignmentRequiredException.class)
-    public ResponseEntity<ApiResponse<Void>> handleDriverAssignmentRequired(DriverAssignmentRequiredException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.failure(ex.getMessage(), null));
-    }
-
     @ExceptionHandler(OptimisticLockingFailureException.class)
     public ResponseEntity<ApiResponse<Void>> handleOptimisticLockingFailure(OptimisticLockingFailureException ex) {
         log.warn("Optimistic lock failure: {}", ex.getMessage());
