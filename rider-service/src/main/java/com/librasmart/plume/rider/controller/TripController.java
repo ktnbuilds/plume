@@ -33,14 +33,14 @@ public class TripController {
         TripResponseDto tripResponseDto = TripResponseDto.from(tripService.createTrip(tripRequestDto));
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
+                .path("/{tripId}")
                 .buildAndExpand(tripResponseDto.id())
                 .toUri();
 
         return ResponseEntity.created(location).body(ApiResponse.success("Trip created successfully.", tripResponseDto));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{tripId}")
     public ResponseEntity<ApiResponse<TripResponseDto>> getTrip(@PathVariable UUID tripId) {
         TripResponseDto tripResponseDto = TripResponseDto.from(tripService.getTrip(tripId));
         return ResponseEntity.ok(ApiResponse.success("Trip retrieved successfully.", tripResponseDto));
@@ -56,7 +56,7 @@ public class TripController {
         return ResponseEntity.ok(ApiResponse.success("Trips retrieved successfully.", new PagedModel<>(trips)));
     }
 
-    @PatchMapping("/{id}/cancel")
+    @PatchMapping("/{tripId}/cancel")
     public ResponseEntity<ApiResponse<Void>> cancelTrip(@PathVariable UUID tripId) {
         tripService.cancelTrip(tripId);
         return ResponseEntity.ok(ApiResponse.success("Trip cancelled successfully.", null));
