@@ -1,0 +1,29 @@
+name: plume
+
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: rider_db
+      POSTGRES_USER: rider_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  cache:
+    image: redis:8
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+
+  broker:
+    image: apache/kafka:4.4.0
+    ports:
+      - "127.0.0.1:9092:9092"
+
+volumes:
+  postgres_data:
+  redis_data:
